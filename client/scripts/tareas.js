@@ -27,6 +27,5 @@ const obtenerTareas = async () => {
       listaTareas.appendChild(li)
     });
     }
-  }
   
   renderizarTareas();
