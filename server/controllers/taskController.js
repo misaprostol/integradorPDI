@@ -24,8 +24,18 @@ const taskController = {
    * @returns {TaskModel} 200 - Retorna un objeto con la tarea
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
-  getTaskByName: (req, res) => {
-    res.json({ message: "Get task by id" });
+  getTaskByName: async (req, res) => {
+    try {
+      const { nombre } = req.body
+      const task = await TaskModel.findByPk(nombre)
+      if(!task){
+        return res.status(404).json({ message: "No existe dicha tarea" });
+      }
+      res.json({ message: task });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Error getting task" });
+    }
   }, 
   
   /**
