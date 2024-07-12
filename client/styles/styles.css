@@ -1,19 +1,103 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
-
-.dm-serif-display-regular {
-  font-family: "DM Serif Display", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.dm-serif-display-regular-italic {
-  font-family: "DM Serif Display", serif;
-  font-weight: 400;
-  font-style: italic;
-}
-
+/* Reset de estilos */
 * {
-  background-color: #EEAF5A;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.formulario {
+  margin-bottom: 20px;
+}
+
+form input[type="number"],
+form input[type="text"],
+form input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form input[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+  background-color: #218838;
+}
+
+.tareas {
+  margin-top: 20px;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  background: #e9ecef;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.btn-tareas {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-tareas:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  main {
+    padding: 10px;
+  }
+
+  form input[type="number"],
+  form input[type="text"],
+  form input[type="submit"] {
+    margin: 5px 0;
+  }
+}
 /*# sourceMappingURL=styles.css.map */
