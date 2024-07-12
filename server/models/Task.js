@@ -20,7 +20,7 @@ const Task = sequelize.define('tareas', {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    },
+    }
 }, {
   timestamps: false
 })
