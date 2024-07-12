@@ -3,57 +3,60 @@
  * @returns {Array[Object]} - Un listado de tareas
  */
 const obtenerTareas = async () => {
-    const respuesta = await fetch('http://localhost:3000/tasks', {
-      method: 'GET'
-    })
-    const tareas = await respuesta.json()
+  const respuesta = await fetch('http://localhost:3000/tasks', {
+    method: 'GET'
+  });
+  const tareas = await respuesta.json();
   
-    return tareas
-  }
-  
-  /**
-   * Completa la lista <ul> con las tareas obtenidas
-   */
-  const renderizarTareas = async () => {
-    // Obtener tareas
-    const tareas = await obtenerTareas();
+  return tareas;
+}
 
-    // Seleccionar el elemento <ul> en el DOM
-    const listaTareas = document.getElementById('lista-tareas')
+/**
+ * Completa la lista <ul> con las tareas obtenidas
+ */
+const renderizarTareas = async () => {
+  // Obtener tareas
+  const tareas = await obtenerTareas();
 
-    // Limpiar la lista actual
-    listaTareas.innerHTML = '';
+  // Seleccionar el elemento <ul> en el DOM
+  const listaTareas = document.getElementById('lista-tareas');
 
-    // Iterar sobre las tareas y crear elementos <li>
-    tareas.forEach(tarea => {
-      const li = document.createElementNS('li');
-      li.textContent = `${tarea.name}: ${tarea.description} - ${tarea.description} (${tarea.completed ? 'true' : 'false'})`;
-      listaTareas.appendChild(li)
-    });}
+  // Limpiar la lista actual
+  listaTareas.innerHTML = '';
 
-  // Evento para manejar el envío del formulario
-  const formulario = document.getElementById('formulario')
-    formulario.addEventListener('submit', async (event) => {
-    event.preventDefault()
+  // Iterar sobre las tareas y crear elementos <li>
+  tareas.forEach(tarea => {
+    const li = document.createElement('li');  // Cambio: 'li' en vez de 'createElementNS'
+    li.textContent = `${tarea.name}: ${tarea.description} - ${tarea.completed ? 'true' : 'false'}`;
+    listaTareas.appendChild(li);
+  });
+}
 
-    const formData = new FormData(formulario)
-    const data = {
+// Evento para manejar el envío del formulario
+const formulario = document.getElementById('formulario');
+formulario.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(formulario);
+  const data = {
+    id: formData.get('id'),
     name: formData.get('name'),
-    description: formData.get('description')
-  }
+    description: formData.get('description'),
+    completed: formData.get('completed') === 'true'
+  };
 
   // Enviar los datos al servidor
-    await fetch('http://localhost:3000/tasks', {
+  await fetch('http://localhost:3000/tasks', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
-  })
+  });
 
   // Llamar a renderizarTareas para actualizar la lista de tareas
-  renderizarTareas()
-})
+  renderizarTareas();
+});
 
 // Llamar a renderizarTareas para mostrar las tareas cuando se carga la página
-renderizarTareas()
+renderizarTareas();

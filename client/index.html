@@ -9,27 +9,26 @@
 <body>
   <header class="py-3">
     <h1>Listado de tareas</h1>
-    <p class="second_title">Agregar Nueva Tarea</p><br>
     <hr />
   </header>
   <main class="container">
-
+    <h2>Agregar una nueva Tarea</h2>
     <section class="formulario">
       <form action="http://localhost:3000/tasks" method="post" id="formulario">
         <input type="number" placeholder="ID" name="id">
         <input type="text" placeholder="Nombre" name="name">
         <input type="text" placeholder="Descripcion" name="description">
         <input type="text" placeholder="Completed" name="completed">
-        <input type="btn" type="submit" value="enviar">
+        <input type="submit" value="enviar">
       </form>
     </section>
 
     <section class="tareas">
       <h2>Tareas</h2>
-    <ul id="lista-tareas">
-      <!--Acá se muestran las tareas-->
-    </ul>
-    <input class="btn-tareas" type="submit" value="ver">
+      <ul id="lista-tareas">
+        <!--Acá se muestran las tareas-->
+      </ul>
+      <input class="btn-tareas" type="button" value="ver">
     </section>
   </main>
 
