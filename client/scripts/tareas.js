@@ -26,9 +26,27 @@ const renderizarTareas = async () => {
 
   // Iterar sobre las tareas y crear elementos <li>
   tareas.forEach(tarea => {
-    const li = document.createElement('li');  // Cambio: 'li' en vez de 'createElementNS'
-    li.textContent = `${tarea.name}: ${tarea.description} - ${tarea.completed ? 'true' : 'false'}`;
+    const li = document.createElement('li');
+    li.innerHTML = `
+      ${tarea.name}: ${tarea.description} - ${tarea.completed ? 'true' : 'false'}
+      <button class="completar-tarea" data-id="${tarea.id}">${tarea.completed ? 'Desmarcar' : 'Completar'}</button>
+      <button class="borrar-tarea" data-id="${tarea.id}">Borrar</button>
+      <button class="actualizar-tarea" data-id="${tarea.id}">Actualizar</button>
+    `;
     listaTareas.appendChild(li);
+  });
+
+  // Agregar eventos a los botones
+  document.querySelectorAll('.completar-tarea').forEach(button => {
+    button.addEventListener('click', completarTarea);
+  });
+
+  document.querySelectorAll('.borrar-tarea').forEach(button => {
+    button.addEventListener('click', borrarTarea);
+  });
+
+  document.querySelectorAll('.actualizar-tarea').forEach(button => {
+    button.addEventListener('click', actualizarTarea);
   });
 }
 
@@ -45,18 +63,45 @@ formulario.addEventListener('submit', async (event) => {
     completed: formData.get('completed') === 'true'
   };
 
-  // Enviar los datos al servidor
-  await fetch('http://localhost:3000/tasks', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
   // Llamar a renderizarTareas para actualizar la lista de tareas
   renderizarTareas();
 });
+
+// Función para completar una tarea
+const completarTarea = async (event) => {
+  const id = event.target.dataset.id;
+  const tarea = await obtenerTareaPorId(id);
+  const updatedData = { ...tarea, completed: !tarea.completed };
+
+  renderizarTareas();
+}
+
+// Función para borrar una tarea
+const borrarTarea = async (event) => {
+  const id = event.target.dataset.id;
+
+  renderizarTareas();
+}
+
+// Función para actualizar una tarea
+const actualizarTarea = async (event) => {
+  const id = event.target.dataset.id;
+  const newName = prompt('Ingrese el nuevo nombre de la tarea:');
+  const tarea = await obtenerTareaPorId(id);
+  const updatedData = { ...tarea, name: newName };
+
+  renderizarTareas();
+}
+
+// Función para obtener una tarea por su ID
+const obtenerTareaPorId = async (id) => {
+  const respuesta = await fetch(`http://localhost:3000/tasks/${id}`, {
+    method: 'GET'
+  });
+  const tarea = await respuesta.json();
+
+  return tarea;
+}
 
 // Llamar a renderizarTareas para mostrar las tareas cuando se carga la página
 renderizarTareas();
