@@ -1,17 +1,19 @@
-.formulario {
-    width: 600px;
-    height: 360px;
-    background-color: rgba(186, 5, 5, 0.863);
-  }
-  .formulario__input {
-    width: 100%;
-    background-color: black;
-  }
-  @media screen and (min-width: 1200px) {
-    .formulario__input {
-      width: 50%;
-      background-color: aqua;
-    }
-  }
-  
-  /*# sourceMappingURL=styles.css.map */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+.dm-serif-display-regular {
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dm-serif-display-regular-italic {
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+* {
+  background-color: #EEAF5A;
+}
+
+/*# sourceMappingURL=styles.css.map */
