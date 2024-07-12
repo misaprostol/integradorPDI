@@ -27,7 +27,7 @@ const obtenerTareas = async () => {
     // Iterar sobre las tareas y crear elementos <li>
     tareas.forEach(tarea => {
       const li = document.createElementNS('li');
-      li.textContent = `${tarea.name}: ${tarea.description}`
+      li.textContent = `${tarea.name}: ${tarea.description} - ${tarea.description} (${tarea.completed ? 'true' : 'false'})`;
       listaTareas.appendChild(li)
     });}
 
