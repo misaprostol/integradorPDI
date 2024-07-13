@@ -1,3 +1,4 @@
+
 .btn-tareas {
   background-color: $secondary-color;
   color: white;
@@ -10,4 +11,10 @@
   &:hover {
     background-color: $secondary-hover;
   }
+}
+
+#btn-renderizar-tareas {
+  padding: 10px;
+  color: $secondary-color;
+
 }

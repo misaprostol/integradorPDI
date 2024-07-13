@@ -103,5 +103,30 @@ const obtenerTareaPorId = async (id) => {
   return tarea;
 }
 
-// Llamar a renderizarTareas para mostrar las tareas cuando se carga la página
-renderizarTareas();
+document.addEventListener('DOMContentLoaded', () => {
+  renderizarTareas();
+
+  // Agregar evento al botón de renderizar tareas
+  const btnRenderizarTareas = document.getElementById('btn-renderizar-tareas');
+  btnRenderizarTareas.addEventListener('click', async () => {
+    await renderizarTareas();
+  });
+
+  // Este es el envío del formulario
+  const formulario = document.getElementById('formulario');
+  formulario.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(formulario);
+    const data = {
+      id: formData.get('id'),
+      name: formData.get('name'),
+      description: formData.get('description'),
+      completed: formData.get('completed') === 'true'
+    };
+
+    // Llamar a renderizarTareas para actualizar la lista de tareas
+    await renderizarTareas();
+  });
+  
+});
