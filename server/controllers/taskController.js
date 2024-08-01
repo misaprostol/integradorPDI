@@ -46,6 +46,16 @@ const taskController = {
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
   createTask: async (req, res) => {
+    try {
+      const { nombre, campo_id, descripcion, completado } = req.body
+      const query = "INSERT INTO tarea (nombre, campo_id, descripcion, completado) VALUES (?, ?)"
+  
+      await promiseQuery(query, [nombre, campo_id, descripcion, completado])
+      res.json({message: "tarea creada!!!"})
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Error getting task" });
+    }
     res.json({message: "Crear tarea!"})
   }, 
   
@@ -57,6 +67,17 @@ const taskController = {
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
   updateTask: (req, res) => {
+    try {
+      const {nombre, campo_id, descripcion, completado} = req.body
+      const query = "UPDATE tarea SET nombre = ?, WHERE id = ?"
+  
+      await promiseQuery(query, [nombre, campo_id, descripcion, completado])
+      res.json({message: "tarea actualizado exitosamente"})
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Error getting task" });
+    }
+  }
     res.json({ message: "Update task" });
   }, 
 
@@ -67,6 +88,7 @@ const taskController = {
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error 
    */
   completeTask: (req, res) => {
+
     res.json({message: "Completar tarea"})
   },
   
@@ -77,8 +99,16 @@ const taskController = {
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
   deleteTask: (req, res) => {
+    try {
+      const query = "DELETE FROM tarea"
+  
+      await promiseQuery(query, [completado])
+      res.json({message: "tarea borrado"})
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Error getting task" });
+    }
     res.json({ message: "Delete task" });
   }
-}
 
 module.exports = taskController;
