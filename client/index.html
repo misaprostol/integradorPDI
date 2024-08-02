@@ -17,7 +17,6 @@
       <form action="http://localhost:3000/tasks" method="post" id="formulario">
         <input type="text" placeholder="Nombre" name="name">
         <input type="text" placeholder="Descripcion" name="description">
-        <input type="text" placeholder="Completed" name="completed">
         <input type="submit" value="enviar">
       </form>
     </section>
@@ -28,7 +27,7 @@
         <!-- Acá se muestran las tareas -->
       </ul>
     
-      <button id="btn-renderizar-tareas">Actualizar las Tareas</button>
+      <button class="btn-tareas" type="submit" value="Mostrar Tareas" onclick="renderizarTreas()"></button>
     </section>
   <script src="scripts/tareas.js"></script>
 </body>

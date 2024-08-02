@@ -14,119 +14,35 @@ const obtenerTareas = async () => {
 /**
  * Completa la lista <ul> con las tareas obtenidas
  */
+const btnTareas = document.querySelector(".btn.tareas");
+
 const renderizarTareas = async () => {
-  // Obtener tareas
-  const tareas = await obtenerTareas();
+  try{
+    let tarea = btnTareas.textContent;
+    console.log(tarea);
+    btnTareas.textContent="Ocultar"
 
-  // Seleccionar el elemento <ul> en el DOM
-  const listaTareas = document.getElementById('lista-tareas');
+    const tareas = await obtenerTareas();
+    const ul = document.getElementById('lista-tareas');
+    ul.innerHTML = '';
 
-  // Limpiar la lista actual
-  listaTareas.innerHTML = '';
+    tareas.forEach(tarea, i => {
+      const li = document.createElement('li');
+      const btnCompleted = tarea.completed ? 'Completada' : 'Incompleta';
+      const btnClass = tarea.completed ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
+      li.innerHTML = `${tarea.id} ${tarea.name} - ${tarea.description} <button class="${btnClass}" onclick="completar(${i})">${btnCompleted}</button>`;
 
-  // Iterar sobre las tareas y crear elementos <li>
-  tareas.forEach(tarea => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      ${tarea.name}: ${tarea.description} - ${tarea.completed ? 'true' : 'false'}
-      <button class="completar-tarea" data-id="${tarea.id}">${tarea.completed ? 'Desmarcar' : 'Completar'}</button>
-      <button class="borrar-tarea" data-id="${tarea.id}">Borrar</button>
-      <button class="actualizar-tarea" data-id="${tarea.id}">Actualizar</button>
-    `;
-    listaTareas.appendChild(li);
-  });
+      ul.appendChild(li);
+    });
 
-  // Agregar eventos a los botones
-  document.querySelectorAll('.completar-tarea').forEach(button => {
-    button.addEventListener('click', completarTarea);
-  });
+  } catch (error) {
+    console.error('Error al recibir las tareas:', error);
+  }
+};
 
-  document.querySelectorAll('.borrar-tarea').forEach(button => {
-    button.addEventListener('click', borrarTarea);
-  });
-
-  document.querySelectorAll('.actualizar-tarea').forEach(button => {
-    button.addEventListener('click', actualizarTarea);
-  });
+const completar = async (i) => {
+  try{
+     const tareas = await obtenerTareas(),
+     const tarea = 
+  }
 }
-
-// Evento para manejar el envío del formulario
-const formulario = document.getElementById('formulario');
-formulario.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  const formData = new FormData(formulario);
-  const data = {
-    id: formData.get('id'),
-    name: formData.get('name'),
-    description: formData.get('description'),
-    completed: formData.get('completed') === 'true'
-  };
-
-  // Llamar a renderizarTareas para actualizar la lista de tareas
-  renderizarTareas();
-});
-
-// Función para completar una tarea
-const completarTarea = async (event) => {
-  const id = event.target.dataset.id;
-  const tarea = await obtenerTareaPorId(id);
-  const updatedData = { ...tarea, completed: !tarea.completed };
-
-  renderizarTareas();
-}
-
-// Función para borrar una tarea
-const borrarTarea = async (event) => {
-  const id = event.target.dataset.id;
-
-  renderizarTareas();
-}
-
-// Función para actualizar una tarea
-const actualizarTarea = async (event) => {
-  const id = event.target.dataset.id;
-  const newName = prompt('Ingrese el nuevo nombre de la tarea:');
-  const tarea = await obtenerTareaPorId(id);
-  const updatedData = { ...tarea, name: newName };
-
-  renderizarTareas();
-}
-
-// Función para obtener una tarea por su ID
-const obtenerTareaPorId = async (id) => {
-  const respuesta = await fetch(`http://localhost:3000/tasks/${id}`, {
-    method: 'GET'
-  });
-  const tarea = await respuesta.json();
-
-  return tarea;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderizarTareas();
-
-  // Agregar evento al botón de renderizar tareas
-  const btnRenderizarTareas = document.getElementById('btn-renderizar-tareas');
-  btnRenderizarTareas.addEventListener('click', async () => {
-    await renderizarTareas();
-  });
-
-  // Este es el envío del formulario
-  const formulario = document.getElementById('formulario');
-  formulario.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(formulario);
-    const data = {
-      id: formData.get('id'),
-      name: formData.get('name'),
-      description: formData.get('description'),
-      completed: formData.get('completed') === 'true'
-    };
-
-    // Llamar a renderizarTareas para actualizar la lista de tareas
-    await renderizarTareas();
-  });
-  
-});
