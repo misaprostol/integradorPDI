@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
-const db = new Sequelize('integrador', 'root', 'root', {
-  host: '127.0.0.1',
+const db = new Sequelize('integrador', 'root', '', {
+  host: 'localhost',
   dialect: 'mysql'
 });
 

@@ -1,4 +1,4 @@
-const TaskModel = require("../models/Task.js");
+const Task = require("../models/Task.js");
 
 const taskController = {
   /**
@@ -9,7 +9,7 @@ const taskController = {
    */
   getAllTasks: async (req, res) => {
     try {
-      const tasks = await TaskModel.findAll();
+      const tasks = await Task.findAll();
 
       return res.status(200).json(tasks);
     } catch (error) {
@@ -24,10 +24,10 @@ const taskController = {
    * @returns {TaskModel} 200 - Retorna un objeto con la tarea
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
-  getTaskByName: async (req, res) => {
+  getTaskById: async (req, res) => {
     try {
-      const { nombre } = req.body
-      const task = await TaskModel.findByPk(nombre)
+      const { id } = req.params
+      const task = await Task.findByPk(id)
       if(!task){
         return res.status(404).json({ message: "No existe dicha tarea" });
       }
@@ -48,15 +48,14 @@ const taskController = {
   createTask: async (req, res) => {
     try {
       const { nombre, campo_id, descripcion, completado } = req.body
-      const query = "INSERT INTO tarea (nombre, campo_id, descripcion, completado) VALUES (?, ?)"
-  
-      await promiseQuery(query, [nombre, campo_id, descripcion, completado])
-      res.json({message: "tarea creada!!!"})
+      
+      const nuevaTask = await Task.create({nombre, campo_id, descripcion, completado})
+      nuevaTask.save()
+      res.status(200).json(nuevaTask)
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error getting task" });
     }
-    res.json({message: "Crear tarea!"})
   }, 
   
   /**
@@ -66,19 +65,18 @@ const taskController = {
    * @returns {TaskModel} 200 - Retorna un objeto con la tarea actualizada
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
-  updateTask: (req, res) => {
+  updateTask: async (req, res) => { {
     try {
       const {nombre, campo_id, descripcion, completado} = req.body
-      const query = "UPDATE tarea SET nombre = ?, WHERE id = ?"
-  
-      await promiseQuery(query, [nombre, campo_id, descripcion, completado])
-      res.json({message: "tarea actualizado exitosamente"})
+      const { id } = req.params
+
+     const actualizarTask =  await Task.update({nombre, campo_id, descripcion, completado}, {where:{id}})
+     res.status(200).json(actualizarTask)
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error getting task" });
     }
   }
-    res.json({ message: "Update task" });
   }, 
 
   /**
@@ -87,28 +85,41 @@ const taskController = {
    * @returns {TaskModel} 200 - Retorna un objeto con la tarea actualizada
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error 
    */
-  completeTask: (req, res) => {
-
-    res.json({message: "Completar tarea"})
+  completeTask: async (req, res) => {
+    try {
+      const {id} = req.params
+      const completed = await Task.findOne({where : {id}, attributes : ["completado"]})
+      const taskcomplete = !completed.dataValues.completado || null
+      if (taskcomplete === null){
+       return res.status(400).json({message : "error" })
+      }
+      const task = await Task.update({completado: taskcomplete}, {where:{id}})
+      console.log(taskcomplete)
+      res.status(200).json(task) 
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Error getting task" });
+    }
   },
-  
+    
+
   /**
    * Elimina una tarea
    * @route DELETE /tasks/:id
    * @returns {TaskModel} 200 - Retorna un objeto con la tarea eliminada
    * @returns {Error} 500 - Retorna un objeto con el mensaje de error
    */
-  deleteTask: (req, res) => {
+  deleteTask: async (req, res) => {
     try {
-      const query = "DELETE FROM tarea"
+      const {id} = req.params
   
-      await promiseQuery(query, [completado])
-      res.json({message: "tarea borrado"})
+      const borrarTask = await Task.destroy({where:{id}} )
+      res.status(200).json(borrarTask)
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error getting task" });
     }
-    res.json({ message: "Delete task" });
-  }
 
+  },
+}
 module.exports = taskController;

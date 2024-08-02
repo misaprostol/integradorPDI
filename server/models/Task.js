@@ -1,23 +1,23 @@
-const { Sequelize } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 // Definir la estructura del Task
 const Task = sequelize.define('tareas', {
     id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     nombre: {
-        type: Sequelize.STRING(25),
+        type: DataTypes.STRING(25),
         allowNull: false
     },
     descripcion: {
-        type: Sequelize.STRING(200),
+        type: DataTypes.STRING(200),
         allowNull: false,
     },
     completado: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
     }
