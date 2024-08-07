@@ -2,6 +2,27 @@
  * Obtiene las tareas de la base de datos
  * @returns {Array[Object]} - Un listado de tareas
  */
+
+const btnForm = document.querySelector(".btn-form");
+
+btnForm.addEventListener('click', function(e){
+  let nombre = document.getElementById('nombre').value
+  nombre = JSON.stringify(nombre);
+  let descripcion = document.getElementById('descripcion').value
+  descripcion = JSON.stringify(descripcion);
+  e.preventDefault()
+
+  fetch('http://localhost:3000/tasks', {
+    method : "POST",
+    headers : {
+      'Content-Type':'application/json'
+    },
+    body: nombre, descripcion
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+})
+
 const obtenerTareas = async () => {
   const respuesta = await fetch('http://localhost:3000/tasks', {
     method: 'GET'
@@ -10,7 +31,7 @@ const obtenerTareas = async () => {
   
   return tareas;
 }
-
+ 
 /**
  * Completa la lista <ul> con las tareas obtenidas
  */
@@ -38,6 +59,8 @@ const renderizarTareas = async () => {
   } catch (error) {
     console.error('Error al recibir las tareas:', error);
   }
+
+
 };
 
 const completar = async (i) => {
