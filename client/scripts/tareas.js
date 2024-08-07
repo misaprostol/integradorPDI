@@ -14,7 +14,7 @@ const obtenerTareas = async () => {
 /**
  * Completa la lista <ul> con las tareas obtenidas
  */
-const btnTareas = document.querySelector(".btn.tareas");
+const btnTareas = document.querySelector(".btn-tareas");
 
 const renderizarTareas = async () => {
   try{
@@ -41,8 +41,36 @@ const renderizarTareas = async () => {
 };
 
 const completar = async (i) => {
-  try{
-     const tareas = await obtenerTareas(),
-     const tarea = 
+  try {
+    const tareas = await obtenerTareas();
+    const tarea = tareas[i];
+    const estadoTarea = !tarea.completed;
+
+    const datos = {
+      completed: estadoTarea
+    };
+
+    const resultado = await fetch(`http://localhost:3000/tasks/${tarea.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datos),
+    });
+
+    if (!resultado.ok) {
+      console.log('Error al completar la tarea');
+    }
+    
+    tarea.completed = estadoTarea;
+
+    renderizarTareas();
+
+  } catch (error) {
+    console.error('Error al completar la tarea:', error);
   }
-}
+};
+
+btnTareas.addEventListener("click", renderizarTareas);
+
+
