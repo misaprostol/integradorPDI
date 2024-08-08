@@ -47,9 +47,9 @@ const taskController = {
    */
   createTask: async (req, res) => {
     try {
-      const { nombre, campo_id, descripcion, completado } = req.body
+      const { nombre, descripcion } = req.body
       
-      const nuevaTask = await Task.create({nombre, campo_id, descripcion, completado})
+      const nuevaTask = await Task.create({nombre, descripcion})
       nuevaTask.save()
       res.status(200).json(nuevaTask)
     } catch (error) {

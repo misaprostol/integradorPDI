@@ -7,15 +7,20 @@ const btnForm = document.querySelector(".btn-form");
 
 btnForm.addEventListener('click', function(e){
   let nombre = document.getElementById('nombre').value
-  nombre = JSON.stringify(nombre);
+  // nombre = JSON.stringify(nombre);
   let descripcion = document.getElementById('descripcion').value
-  descripcion = JSON.stringify(descripcion);
+  // descripcion = JSON.stringify(descripcion);
+  console.log(typeof(descripcion))
   e.preventDefault()
 
   fetch('http://localhost:3000/tasks', {
     method : "POST",
     headers : {
-      'Content-Type':'application/json'
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Requested-With",
     },
     body: nombre, descripcion
   })
@@ -76,7 +81,11 @@ const completar = async (i) => {
     const resultado = await fetch(`http://localhost:3000/tasks/${tarea.id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Requested-With",
       },
       body: JSON.stringify(datos),
     });
