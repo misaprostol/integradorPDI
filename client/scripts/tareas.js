@@ -66,7 +66,7 @@ btnTareas.addEventListener('click',
       const btnDclass = 'btn-delete';
       const btnCompleted = tarea.completado ? 'Completada' : 'Incompleta';
       const btnClass = tarea.completado ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
-      li.innerHTML = `${tarea.id} ${tarea.nombre} - ${tarea.descripcion} <button class="${btnDclass}">Borrar</button><button class="${btnClass} ${tarea.id}">${btnCompleted}</button>`;
+      li.innerHTML = `${tarea.id} ${tarea.nombre} - ${tarea.descripcion} <button class="${btnDclass} ${tarea.id}">Borrar</button><button class="${btnClass} ${tarea.id}">${btnCompleted}</button>`;
       ul.appendChild(li);
       if(btnCompleted === 'Incompleta'){
         const incompleta = document.querySelectorAll('.btn-tareas-incompleta');
@@ -111,7 +111,9 @@ const completar = async (e) => {
 
 const borrarTarea = async (e) => {
  try {
-    const id = e.target
+    console.log(e.target)
+
+    const id = e.target.classList[1]
  
     const tareaBorrada = await fetch(`http://localhost:3000/tasks/${id}`, {
     method: 'DELETE',
@@ -122,7 +124,8 @@ const borrarTarea = async (e) => {
     "Content-Type, Authorization, X-Requested-With",
   }}) 
 
-
+  location.reload()
+  
   }
   catch (error){
     console.log('Error al borrar la tarea', error);
