@@ -46,32 +46,38 @@ const obtenerTareas = async () => {
 
 async function renderizarTareas(){
   try{
-    let tarea = btnTareas.textContent;
-    console.log(tarea);
-    btnTareas.textContent="Ocultar"
-
-    const tareas = await obtenerTareas();
     const ul = document.getElementById('lista-tareas');
-    ul.innerHTML = '';
 
-    tareas.forEach((tarea, i) => {
+    if(btnTareas.textContent === "Ocultar"){
+      ul.innerHTML = '';
+      btnTareas.textContent = "Mostrar Tareas";
+    }else{
+      let tarea = btnTareas.textContent;
       console.log(tarea);
-      const li = document.createElement('li');
-      const btnDclass = 'btn-delete';
-      const btnCompleted = tarea.completado ? 'Completada' : 'Incompleta';
-      const btnClass = tarea.completado ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
-      li.innerHTML = `${tarea.id} ${tarea.nombre} - ${tarea.descripcion} <button class="${btnDclass} ${tarea.id}">Borrar</button><button class="${btnClass} ${tarea.id}">${btnCompleted}</button>`;
-      ul.appendChild(li);
-      if(btnCompleted === 'Incompleta'){
-        const incompleta = document.querySelectorAll('.btn-tareas-incompleta');
-        incompleta.forEach(tarea => tarea.addEventListener('click',completar));
-      }else{
-        const completado = document.querySelectorAll('.btn-tareas-completed');
-        completado.forEach(tarea => tarea.addEventListener('click',completar));
-      }
-      const btnBorrar = document.querySelectorAll('.btn-delete');
-      btnBorrar.forEach(tarea => tarea.addEventListener('click', borrarTarea));
+      btnTareas.textContent="Ocultar"
+
+      const tareas = await obtenerTareas();
+      ul.innerHTML = '';
+
+      tareas.forEach((tarea, i) => {
+        console.log(tarea);
+        const li = document.createElement('li');
+        const btnDclass = 'btn-delete';
+        const btnCompleted = tarea.completado ? 'Completada' : 'Incompleta';
+        const btnClass = tarea.completado ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
+        li.innerHTML = `${tarea.id} ${tarea.nombre} - ${tarea.descripcion} <button class="${btnDclass} ${tarea.id}">Borrar</button><button class="${btnClass} ${tarea.id}">${btnCompleted}</button>`;
+        ul.appendChild(li);
+        if(btnCompleted === 'Incompleta'){
+          const incompleta = document.querySelectorAll('.btn-tareas-incompleta');
+          incompleta.forEach(tarea => tarea.addEventListener('click',completar));
+        }else{
+          const completado = document.querySelectorAll('.btn-tareas-completed');
+          completado.forEach(tarea => tarea.addEventListener('click',completar));
+        }
+        const btnBorrar = document.querySelectorAll('.btn-delete');
+        btnBorrar.forEach(tarea => tarea.addEventListener('click', borrarTarea));
     });
+  }
   } catch (error) {
     console.error('Error al recibir las tareas:', error);
   }
