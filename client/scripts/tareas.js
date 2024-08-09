@@ -10,19 +10,21 @@ btnForm.addEventListener('click', function(e){
   // nombre = JSON.stringify(nombre);
   let descripcion = document.getElementById('descripcion').value
   // descripcion = JSON.stringify(descripcion);
-  console.log(typeof(descripcion))
+  console.log(descripcion, nombre)
   e.preventDefault()
+  const obj={
+    nombre, 
+    descripcion
+  }
 
   fetch('http://localhost:3000/tasks', {
     method : "POST",
     headers : {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "http://localhost:5500",
       "Access-Control-Allow-Credentials": true,
-      "Access-Control-Allow-Headers":
-      "Content-Type, Authorization, X-Requested-With",
     },
-    body: nombre, descripcion
+    body: JSON.stringify(obj)
   })
   .then(res => res.json())
   .then(data => console.log(data))
@@ -30,10 +32,15 @@ btnForm.addEventListener('click', function(e){
 
 const obtenerTareas = async () => {
   const respuesta = await fetch('http://localhost:3000/tasks', {
-    method: 'GET'
+    method: 'GET',
+    headers : {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "http://localhost:5500",
+      "Access-Control-Allow-Credentials": true,
+    }
   });
   const tareas = await respuesta.json();
-  
+  console.log(tareas)
   return tareas;
 }
  
@@ -42,7 +49,8 @@ const obtenerTareas = async () => {
  */
 const btnTareas = document.querySelector(".btn-tareas");
 
-const renderizarTareas = async () => {
+btnTareas.addEventListener('click', 
+  async () => {
   try{
     let tarea = btnTareas.textContent;
     console.log(tarea);
@@ -52,57 +60,71 @@ const renderizarTareas = async () => {
     const ul = document.getElementById('lista-tareas');
     ul.innerHTML = '';
 
-    tareas.forEach(tarea, i => {
+    tareas.forEach((tarea, i) => {
+      console.log(tarea);
       const li = document.createElement('li');
-      const btnCompleted = tarea.completed ? 'Completada' : 'Incompleta';
-      const btnClass = tarea.completed ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
-      li.innerHTML = `${tarea.id} ${tarea.name} - ${tarea.description} <button class="${btnClass}" onclick="completar(${i})">${btnCompleted}</button>`;
-
+      const btnDclass = 'btn-delete';
+      const btnCompleted = tarea.completado ? 'Completada' : 'Incompleta';
+      const btnClass = tarea.completado ? 'btn-tareas-completed' : 'btn-tareas-incompleta';
+      li.innerHTML = `${tarea.id} ${tarea.nombre} - ${tarea.descripcion} <button class="${btnDclass}">Borrar</button><button class="${btnClass} ${tarea.id}">${btnCompleted}</button>`;
       ul.appendChild(li);
+      if(btnCompleted === 'Incompleta'){
+        const incompleta = document.querySelectorAll('.btn-tareas-incompleta');
+        incompleta.forEach(tarea => tarea.addEventListener('click',completar));
+      }else{
+        const completado = document.querySelectorAll('.btn-tareas-completed');
+        completado.forEach(tarea => tarea.addEventListener('click',completar));
+      }
+      const btnBorrar = document.querySelectorAll('.btn-delete');
+      btnBorrar.forEach(tarea => tarea.addEventListener('click', borrarTarea));
     });
-
   } catch (error) {
     console.error('Error al recibir las tareas:', error);
   }
+});
 
-
-};
-
-const completar = async (i) => {
+const completar = async (e) => {
   try {
-    const tareas = await obtenerTareas();
-    const tarea = tareas[i];
-    const estadoTarea = !tarea.completed;
+    const id = e.target.classList[1]
 
-    const datos = {
-      completed: estadoTarea
-    };
-
-    const resultado = await fetch(`http://localhost:3000/tasks/${tarea.id}`, {
+    const resultado = await fetch(`http://localhost:3000/tasks/completado/${id}`, {
       method: 'PUT',
       headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "http://localhost:5500",
       "Access-Control-Allow-Credentials": true,
       "Access-Control-Allow-Headers":
       "Content-Type, Authorization, X-Requested-With",
-      },
-      body: JSON.stringify(datos),
+      }
     });
 
     if (!resultado.ok) {
       console.log('Error al completar la tarea');
     }
     
-    tarea.completed = estadoTarea;
-
-    renderizarTareas();
+    location.reload()
 
   } catch (error) {
     console.error('Error al completar la tarea:', error);
   }
 };
 
-btnTareas.addEventListener("click", renderizarTareas);
+const borrarTarea = async (e) => {
+ try {
+    const id = e.target
+ 
+    const tareaBorrada = await fetch(`http://localhost:3000/tasks/${id}`, {
+    method: 'DELETE',
+    headers: {"Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "http://localhost:5500",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, X-Requested-With",
+  }}) 
 
 
+  }
+  catch (error){
+    console.log('Error al borrar la tarea', error);
+ } 
+}

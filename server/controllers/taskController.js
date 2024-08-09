@@ -89,7 +89,9 @@ const taskController = {
     try {
       const {id} = req.params
       const completed = await Task.findOne({where : {id}, attributes : ["completado"]})
-      const taskcomplete = !completed.dataValues.completado || null
+      const taskcomplete = !completed.dataValues.completado
+      console.log(completed, taskcomplete)
+
       if (taskcomplete === null){
        return res.status(400).json({message : "error" })
       }

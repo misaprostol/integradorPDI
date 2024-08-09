@@ -5,7 +5,7 @@ const cors = require('cors');
 
 // Middleware Setup
 app.use(express.json());
-app.use(cors("http://localhost:3000"))
+app.use(cors({origin:"http://localhost:5500"}))
 
 // Rutas
 const taskRoutes = require('./routes/taskRoutes');
