@@ -44,11 +44,11 @@ const obtenerTareas = async () => {
   return tareas;
 }
 
-async function renderizarTareas(){
+async function renderizarTareas(e){
   try{
     const ul = document.getElementById('lista-tareas');
 
-    if(btnTareas.textContent === "Ocultar"){
+    if(e.target.textContent === "Ocultar"){
       ul.innerHTML = '';
       btnTareas.textContent = "Mostrar Tareas";
     }else{
@@ -109,7 +109,7 @@ const completar = async (e) => {
       console.log('Error al completar la tarea');
     }
     
-    renderizarTareas();
+    renderizarTareas(e);
 
   } catch (error) {
     console.error('Error al completar la tarea:', error);
@@ -131,7 +131,7 @@ const borrarTarea = async (e) => {
     "Content-Type, Authorization, X-Requested-With",
   }}) 
 
-  renderizarTareas();
+  renderizarTareas(e);
   
   }
   catch (error){
