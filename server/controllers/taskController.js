@@ -49,6 +49,13 @@ const taskController = {
     try {
       const { nombre, descripcion } = req.body
       
+      if(!nombre){
+        return res.status(401).json({error: "El campo nombre esta vacio"})
+      }
+      if(!descripcion){
+        return res.status(401).json({error: "El campo descripcion esta vacio"})
+      }
+
       const nuevaTask = await Task.create({nombre, descripcion})
       nuevaTask.save()
       res.status(200).json(nuevaTask)
@@ -67,11 +74,24 @@ const taskController = {
    */
   updateTask: async (req, res) => { {
     try {
-      const {nombre, campo_id, descripcion, completado} = req.body
+      const {nombre, descripcion, completado} = req.body
       const { id } = req.params
 
-     const actualizarTask =  await Task.update({nombre, campo_id, descripcion, completado}, {where:{id}})
-     res.status(200).json(actualizarTask)
+      const task = await Task.findByPk(id)
+
+      if(!task){
+        return res.status(404).json({ message: "No existe dicha tarea" });
+      }
+
+      if(!nombre){
+        return res.status(401).json({error: "El campo nombre esta vacio"})
+      }
+      if(!descripcion){
+        return res.status(401).json({error: "El campo descripcion esta vacio"})
+      }
+
+     const actualizarTask =  await Task.update({nombre, descripcion, completado}, {where:{id}})
+     res.status(200).json(await Task.findByPk(id))
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error getting task" });
@@ -90,14 +110,13 @@ const taskController = {
       const {id} = req.params
       const completed = await Task.findOne({where : {id}, attributes : ["completado"]})
       const taskcomplete = !completed.dataValues.completado
-      console.log(completed, taskcomplete)
 
       if (taskcomplete === null){
-       return res.status(400).json({message : "error" })
+        return res.status(404).json({ message: "No existe dicha tarea" });
       }
+
       const task = await Task.update({completado: taskcomplete}, {where:{id}})
-      console.log(taskcomplete)
-      res.status(200).json(task) 
+      res.status(200).json(taskcomplete) 
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error getting task" });
@@ -114,6 +133,11 @@ const taskController = {
   deleteTask: async (req, res) => {
     try {
       const {id} = req.params
+      const task = await Task.findByPk(id)
+
+      if(!task){
+        return res.status(404).json({ message: "No existe dicha tarea" });
+      }
   
       const borrarTask = await Task.destroy({where:{id}} )
       res.status(200).json(borrarTask)

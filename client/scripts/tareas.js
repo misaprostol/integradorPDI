@@ -43,14 +43,8 @@ const obtenerTareas = async () => {
   console.log(tareas)
   return tareas;
 }
- 
-/**
- * Completa la lista <ul> con las tareas obtenidas
- */
-const btnTareas = document.querySelector(".btn-tareas");
 
-btnTareas.addEventListener('click', 
-  async () => {
+async function renderizarTareas(){
   try{
     let tarea = btnTareas.textContent;
     console.log(tarea);
@@ -81,7 +75,14 @@ btnTareas.addEventListener('click',
   } catch (error) {
     console.error('Error al recibir las tareas:', error);
   }
-});
+}
+ 
+/**
+ * Completa la lista <ul> con las tareas obtenidas
+ */
+const btnTareas = document.querySelector(".btn-tareas");
+
+btnTareas.addEventListener('click', renderizarTareas);
 
 const completar = async (e) => {
   try {
@@ -102,7 +103,7 @@ const completar = async (e) => {
       console.log('Error al completar la tarea');
     }
     
-    location.reload()
+    renderizarTareas();
 
   } catch (error) {
     console.error('Error al completar la tarea:', error);
@@ -124,7 +125,7 @@ const borrarTarea = async (e) => {
     "Content-Type, Authorization, X-Requested-With",
   }}) 
 
-  location.reload()
+  renderizarTareas();
   
   }
   catch (error){
